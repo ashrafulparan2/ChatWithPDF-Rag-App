@@ -66,7 +66,7 @@ def setup_qa_chain(db):
 # Streamlit UI with Conversational Style
 st.title("PDF Chatbot")
 
-# Custom CSS for chat-like appearance
+# Custom CSS for chat-like appearance with left/right alignment
 st.markdown("""
     <style>
     .chat-container {
@@ -76,23 +76,27 @@ st.markdown("""
         padding: 10px;
         border-radius: 5px;
         background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
     }
     .user-message {
         background-color: #007bff;
         color: white;
         padding: 10px;
         border-radius: 10px;
-        margin: 5px 0;
         max-width: 70%;
-        align-self: flex-end;
+        align-self: flex-start;  /* Aligns user messages to the left */
+        margin-right: auto;
     }
     .bot-message {
         background-color: #e9ecef;
         color: black;
         padding: 10px;
         border-radius: 10px;
-        margin: 5px 0;
         max-width: 70%;
+        align-self: flex-end;    /* Aligns bot messages to the right */
+        margin-left: auto;
     }
     </style>
 """, unsafe_allow_html=True)

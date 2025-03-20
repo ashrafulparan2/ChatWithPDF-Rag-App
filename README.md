@@ -1,7 +1,7 @@
 # ChatWithPDF-Rag-App
 
 ![alt text](image.png)
-![alt text](image-1.png)
+![alt text](image-2.png)
 
 ## Prerequisites
 
@@ -47,4 +47,3 @@ Ensure the FAISS vectorstore is correctly set up before running the app.
 ## Troubleshooting
 If the app fails to load, verify that all dependencies are installed and the Hugging Face token is correctly configured.
 Ensure the vectorstore files are not corrupted and are in the correct directory.
- ```

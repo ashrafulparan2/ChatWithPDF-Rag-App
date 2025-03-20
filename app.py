@@ -23,11 +23,10 @@ def extract_text_from_pdf(uploaded_file):
             for page in pdf.pages:
                 text += page.extract_text()
     return text
-
     
+# Function to create chunks of extracted text
 def create_chunks(extracted_data):
-    # Wrap the extracted text in Document objects
-    documents = [Document(page_content=extracted_data)]
+    documents = [Document(page_content=extracted_data)]  # Wrap the extracted text in Document objects
     
     # Now, split the documents into chunks
     text_splitter = RecursiveCharacterTextSplitter(
@@ -79,6 +78,10 @@ def setup_qa_chain(db):
 # Streamlit UI
 st.title("PDF Chatbot App")
 
+# Session state initialization
+if 'conversation' not in st.session_state:
+    st.session_state.conversation = []
+
 # File upload section
 uploaded_file = st.file_uploader("Upload a PDF", type=["pdf"])
 
@@ -87,12 +90,12 @@ if uploaded_file is not None:
     
     # Extract text from uploaded PDF
     documents = extract_text_from_pdf(uploaded_file)
-    st.write(f"Extracted {len(documents)} documents from your PDF.")
-
+    st.write(f"Extracted text from your PDF.")
+    
     # Create chunks from the documents
     text_chunks = create_chunks(documents)
     st.write(f"Created {len(text_chunks)} text chunks.")
-
+    
     # Embedding and FAISS storage
     embedding_model = get_embedding_model()
     db = FAISS.from_documents(text_chunks, embedding_model)
@@ -101,13 +104,25 @@ if uploaded_file is not None:
     
     # Load the QA chain
     qa_chain = setup_qa_chain(db)
+
+    # Display previous conversation
+    if st.session_state.conversation:
+        for q, a in st.session_state.conversation:
+            st.write(f"**Q:** {q}")
+            st.write(f"**A:** {a}")
     
     # User input for question
     user_query = st.text_input("Ask a question about the PDF:")
-    
+
     if user_query:
+        # Get the response from the QA system
         response = qa_chain.invoke({'query': user_query})
+        answer = response["result"]
+        
+        # Display the new answer
         st.write("### Answer:")
-        st.write(response["result"])
+        st.write(answer)
         
-        
+        # Save the conversation
+        st.session_state.conversation.append((user_query, answer))  # Store both question and answer
+

@@ -99,7 +99,7 @@ if uploaded_file is not None:
     # Embedding and FAISS storage
     embedding_model = get_embedding_model()
     db = FAISS.from_documents(text_chunks, embedding_model)
-    DB_FAISS_PATH = "/kaggle/working/vectorstore/db_faiss"
+    DB_FAISS_PATH = "db_faiss"
     db.save_local(DB_FAISS_PATH)
     
     # Load the QA chain
